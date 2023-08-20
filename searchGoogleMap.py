@@ -10,7 +10,7 @@ import datetime
 # make csv data list
 list_of_lists = []
 
-with open("line_bot/templates/line_bot/udon-shop.csv", encoding="utf-8") as f:
+with open("line_bot/templates/line_bot/udon-shop-detail - udon-shop-detail.csv", encoding="utf-8") as f:
     csv.reader(f)
     for row in csv.reader(f):
         list_of_lists.append(row)
@@ -19,9 +19,9 @@ with open("line_bot/templates/line_bot/udon-shop.csv", encoding="utf-8") as f:
 wd = webdriver.Chrome(service=Service('C:/Users/soma_/Downloads/chromedriver_win32/chromedriver.exe'))
 
 # access to Google Map Top
-load_url = 'https://www.google.com/maps'
-wd.get(load_url)
-time.sleep(3)
+# load_url = 'https://www.google.com/maps'
+# wd.get(load_url)
+# time.sleep(3)
 
 # get every udon-shop details
 row = -1
@@ -30,15 +30,17 @@ for list_data in list_of_lists:
     row += 1
     
     # skip header
-    if list_data[0] == "名前":
+    if list_data[11] != "":
         continue
     
-    # get search bar position
-    search_box = wd.find_element(By.ID, "searchboxinput")
-    search_box.send_keys(list_data[0])
-    # get search button position
-    search = wd.find_element(By.ID, "searchbox-searchbutton")
-    search.send_keys(Keys.ENTER)
+    wd.get(list_data[10])
+    
+    # # get search bar position
+    # search_box = wd.find_element(By.ID, "searchboxinput")
+    # search_box.send_keys(list_data[0])
+    # # get search button position
+    # search = wd.find_element(By.ID, "searchbox-searchbutton")
+    # search.send_keys(Keys.ENTER)
     
     # wait until push Enter key
     wait = input("Are You Selected It? [y/N]  ")
@@ -106,9 +108,9 @@ for list_data in list_of_lists:
         # marge shop_detail to list_data
         list_of_lists[row].extend(shop_detail)
         
-    # delete text from search bar
-    for _ in range(len(list_data[0])):
-        search_box.send_keys(Keys.BACKSPACE)
+    # # delete text from search bar
+    # for _ in range(len(list_data[0])):
+    #     search_box.send_keys(Keys.BACKSPACE)
     
     # add to CSV file
     create_csv_path = r"c:\Users\soma_\Desktop\TwoGate_Dev_Camp\TwoGate_Dev_Camp\line_bot\templates\line_bot\udon-shop-detail.csv"
