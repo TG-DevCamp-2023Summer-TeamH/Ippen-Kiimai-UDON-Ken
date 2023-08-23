@@ -3,20 +3,73 @@ from django.http import HttpResponse,JsonResponse
 import json          #json形式の読み込み
 import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
-from .templates.search_templates import pref, tak, chu
+from .templates.search_templates import u_pref, u_tak, u_chu, u_nis, u_hig, shopData, today_tomorrow
+import datetime
 
 def create_message(message):
     if message[0] == '1':
-        if message[4].isdecimal():
-            with open('templates/line_bot/udon-shop.csv') as file:
-                
+        if message[4].isdecimal() or message[4] == 'a':
+            now = datetime.datetime.now()
+            day = {0: 21, 1: 25, 2: 29, 3: 33, 4: 37, 5: 41, 6: 17}
+            today_row = day[now.weekday()]
+            now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
+            now_time = int(now_time)
+            if message[5] == 'm':
+                if now.weekday() == 6:
+                    today_row -= 24
+                else:
+                    today_row += 4
+                now_time = 1200
+            elif message[5] == 'd':
+                now_time = 1200
+            print(now_time)
+            filedata = shopData()
+            pickdata = []
+            text = "エリア内現在営業中店舗のトップ3に絞って出力しています。\n\n香川県のうどん屋は玉数がなくなり次第終了という店舗が多いため、営業中と書かれていてもすでに営業が終了している場合がございます。\n予めご了承ください。\n"
+            if message[4] == 'a':
+                if message[2] == 'a':
+                    for i in filedata:
+                        if i[today_row] != "定休日" and i[today_row] != "営業時間情報無し":
+                            if int('{:02}'.format(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int('{:02}'.format(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
+                                pickdata.append(i)
+                else:
+                    for i in filedata:
+                        if message[2] == i[5] and i[today_row] != "定休日" and i[today_row] != "営業時間情報無し":
+                            if int('{:02}'.format(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int('{:02}'.format(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
+                                pickdata.append(i)
+            else:
+                for i in filedata:
+                    if message[2] == i[5] and message[4] == i[8] and i[today_row] != "定休日" and i[today_row] != "営業時間情報無し":
+                        if int('{:02}'.format(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int('{:02}'.format(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
+                            pickdata.append(i)
+            if len(pickdata) != 0:
+                for i in range(len(pickdata)):
+                    index = i
+                    for l in range(i, len(pickdata)):
+                        if pickdata[index][15] < pickdata[l][15] or pickdata[index][15] == pickdata[l][15] and pickdata[index][16] < pickdata[l][16]:
+                            index = l
+                    tmp = pickdata[i]
+                    pickdata[i] = pickdata[index]
+                    pickdata[index] = tmp
+                emoji = {0: '🥇', 1: '🥈', 2:'🥉'}
+                for i in range(len(pickdata)):
+                    if i >= 3:
+                        break
+                    text += "\n" + emoji[i] + pickdata[i][1]
+            else:
+                text += "\n該当する施設が見つかりませんでした。"
+            data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
         else:
             if message[2] == '0':
-                data = tak()
+                data = u_tak()
             elif message[2] == '1':
-                data = chu()
+                data = u_chu()
+            elif message[2] == '2':
+                data = u_nis()
+            elif message[2] == '3':
+                data = u_hig()
             else:
-                data = pref()
+                data = u_pref()
         return data
     elif message == '2':
         return
