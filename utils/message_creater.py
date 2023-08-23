@@ -6,37 +6,13 @@ import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
 
 def create_single_text_message(message):
-    if message == 'うどんの店舗を検索する':
-        test_message = [
-            {
-                "type": "text",
-                "text": "sample quick reply!",
-                "quickReply": {
-                    "items": [
-                        {
-                            "type": "action",
-                            "action": {
-                                "type": "message",
-                                "label": "高松市内",
-                                "text": "高松市内"
-                            }
-                        },
-                        {
-                            "type": "action",
-                            "action": {
-                                "type": "message",
-                                "label": "中讃（丸亀）",
-                                "text": "中讃（丸亀）"
-                            }
-                        }
-                    ]
-                }
-            }
-        ]
-        return test_message
-    elif message == 'うどんスタンプラリーを開く':
+    if message[0] == '1':
+        json_data = json.load(open('templates/json/udon_search_pref.json', 'r'))
+        message = [json_data]
+        return message
+    elif message[0] == '2':
         return
-    elif message == '観光地を調べる':
+    elif message[0] == '3':
         print('Google Mapから現在地を送信してください。')
         @handler.add(MessageEvent, message=LocationMessage)
         def handler_location(event):
@@ -65,5 +41,5 @@ def create_single_text_message(message):
                     print(row) 
             else:
                 print(row)
-    elif message == 'お土産を見つける':
+    elif message[0] == '4':
         return

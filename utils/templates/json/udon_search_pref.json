@@ -1,0 +1,40 @@
+{
+    "type": "text",
+    "text": "以下より現在地またはエリア名を送信してください。",
+    "quickReply": {
+        "items": [
+            {
+                "type": "action",
+                "action": {
+                    "type": "message",
+                    "label": "高松市内",
+                    "text": "高松市内のうどん店を探す"
+                }
+            },
+            {
+                "type": "action",
+                "action": {
+                    "type": "message",
+                    "label": "中讃（丸亀）",
+                    "text": "中讃（丸亀）のうどん店を探す"
+                }
+            },
+            {
+                "type": "action",
+                "action": {
+                    "type": "message",
+                    "label": "中讃（丸亀）",
+                    "text": "中讃（丸亀）のうどん店を探す"
+                }
+            },
+            {
+                "type": "action",
+                "action": {
+                    "type": "message",
+                    "label": "中讃（丸亀）",
+                    "text": "中讃（丸亀）のうどん店を探す"
+                }
+            }
+        ]
+    }
+}
