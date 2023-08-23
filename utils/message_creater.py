@@ -16,7 +16,7 @@ def create_single_text_message(message):
         sightseeing_message = [
             {
                 "type": "text",
-                "text": "現在地を以下のクイックリプライから選択するか送信してください。"
+                "text": "現在地を以下のクイックリプライから選択するか送信してください。",
                 "quickReply": {
                     "items":[
                         {
