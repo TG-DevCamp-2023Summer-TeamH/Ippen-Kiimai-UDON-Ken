@@ -4,15 +4,24 @@ from django.http import JsonResponse
 import json          #json形式の読み込み
 import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
+from .templates.search_templates import pref, tak, chu
 
-def create_single_text_message(message):
+def create_message(message):
     if message[0] == '1':
-        json_data = json.load(open('templates/json/udon_search_pref.json', 'r'))
-        message = [json_data]
-        return message
-    elif message[0] == '2':
+        if message[4].isdecimal():
+            with open('templates/line_bot/udon-shop.csv') as file:
+                
+        else:
+            if message[2] == '0':
+                data = tak()
+            elif message[2] == '1':
+                data = chu()
+            else:
+                data = pref()
+        return data
+    elif message == '2':
         return
-    elif message[0] == '3':
+    elif message == '3':
         print('Google Mapから現在地を送信してください。')
         @handler.add(MessageEvent, message=LocationMessage)
         def handler_location(event):
@@ -41,5 +50,7 @@ def create_single_text_message(message):
                     print(row) 
             else:
                 print(row)
-    elif message[0] == '4':
+    elif message == '4':
         return
+    else:
+        return {"type": "message", "text": "Error Message."}
