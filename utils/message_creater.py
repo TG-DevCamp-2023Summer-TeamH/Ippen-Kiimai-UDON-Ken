@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
 from .templates.search_templates import takamatuCity, chusan, seisan, tousan, shima
+from datetime import datetime
 import json          #json形式の読み込み
 import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
@@ -76,6 +77,43 @@ def create_message(message):
         return
     
     elif message == '3':
+            def parse_hours(hours_str):
+                parsed_hours = []
+                for time_range in hours_str.split():
+                    start_time, end_time = time_range.split("-")
+                    start_hour, start_minute = map(int, end_time.split(":"))
+                    end_hour, end_minute = map(int, end_time.split(":"))
+                    parsed_hours.append((start_hour, start_minute, end_hour, end_minute))
+                return parsed_hours
+            
+            def is_shop_open(opening_hours, current_time):
+                for start_hour, start_minute, end_hour, end_minute in opening_hours:
+                    start_time = datetime.strptime(f"{start_hour:02d}:{start_minute:02d}", "%H:%M").time()
+                    end_time = datetime.strptime(f"{end_hour:02d}:{end_minute:02d}", "%H:%M").time()
+
+                    if start_time <= current_time <= end_time:
+                        return True
+                    
+                return False
+            
+            csv_file = "tourist-attraction.csv"
+            current_day = datetime.now().strftime("%A")
+            current_time = datetime.now().time()
+
+            with open(csv_file, "r") as file:
+                lines = file.readlines()[1:]
+                for line in lines:
+                    day, hours_str = line.strip().split(",")
+                    if day == current_day:
+                        if hours_str:
+                            opening_hours = parse_hours(hours_str)
+                            if is_shop_open(opening_hours, current_time):
+                                print(f"観光スポットは{current_day}に現在開店しています。")
+                            else:
+                                print(f"観光スポットは{current_day}に現在閉店しています。")
+                        else:
+                            print("観光スポットは営業していません。")
+                        break
             if message[4].isdecimal() or message[4] == 'a':
                 filedata = filename()
                 pickedata = []
@@ -118,6 +156,7 @@ def create_message(message):
                 print('屋外')
             else:
                 print('屋内')
+            
 
             #csvを読み込んで一旦全ての観光地を表示。
             filename = 'tourist-attraction.csv'
