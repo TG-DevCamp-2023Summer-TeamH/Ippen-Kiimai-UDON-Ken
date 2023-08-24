@@ -104,15 +104,13 @@ def create_message(message, user_id):
                         return True
                     
                 return False
-            
-            csv_file = "tourist_attraction.csv"
+
 
             current_day = datetime.datetime.now().strftime("%A")
             current_time = datetime.datetime.now().time()
 
-            with open(csv_file, "r") as file:
-                lines = file.readlines()[1:]
-                for line in lines:
+            data = spotData()
+            for line in data:
                     day, hours_str = line.strip().split(",")
                     if day == current_day:
                         if hours_str:
@@ -125,7 +123,6 @@ def create_message(message, user_id):
                             print("観光スポットは営業していません。")
                         break
             if message[4].isdecimal() or message[4] == 'a':
-                filedata = csv_file()
                 pickedata = []
                 text = "エリア内には以下のスポットがあります。"
                 if message[4] == 'a':
@@ -176,20 +173,17 @@ def create_message(message, user_id):
 
     elif message[0] == '4':
         def load_data():
-            data = []
-            with open(csv_file, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
-                for line in lines:
-                    items = line.sprit().split('\t')
-                    product = {
-                        "商品の名前": items[0],
-                        "カテゴリID": items[1],
-                        "カテゴリ名": items[2],
-                        "金額": items[3],
-                        "ECサイト": items[4]
-                        }
+            data = souvenir()
+            for product in data:
+                    data.append({
+                        "商品の名前": souvenir[0],
+                        "カテゴリID": souvenir[1],
+                        "カテゴリ名": souvenir[2],
+                        "金額": souvenir[3],
+                        "ECサイト": souvenir[4]
+                        })
                     data.append(product)
-                return data
+            return data
 
     def display_products_by_category(category_id):
         products = []
