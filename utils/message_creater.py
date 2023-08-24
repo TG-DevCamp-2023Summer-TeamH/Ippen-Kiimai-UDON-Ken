@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima
+from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima, spotData
 from .templates.souvenir_templates import category
 from datetime import datetime
 import json          #json形式の読み込み
@@ -99,13 +99,12 @@ def create_message(message):
                         return True
                     
                 return False
-            
-            csv_file = "tourist_attraction.csv"
+
 
             current_day = datetime.datetime.now().strftime("%A")
             current_time = datetime.datetime.now().time()
 
-            with open(csv_file, "r") as file:
+            with open(spotData, "r") as file:
                 lines = file.readlines()[1:]
                 for line in lines:
                     day, hours_str = line.strip().split(",")
@@ -120,7 +119,7 @@ def create_message(message):
                             print("観光スポットは営業していません。")
                         break
             if message[4].isdecimal() or message[4] == 'a':
-                filedata = csv_file()
+                filedata = spotData()
                 pickedata = []
                 text = "エリア内には以下のスポットがあります。"
                 if message[4] == 'a':
@@ -172,7 +171,7 @@ def create_message(message):
     elif message[0] == '4':
         def load_data():
             data = []
-            with open(csv_file, 'r', encoding='utf-8') as f:
+            with open(spotData, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
                 for line in lines:
                     items = line.sprit().split('\t')
