@@ -21,3 +21,10 @@ def index(request):
         line_message.reply(reply_token)
         print("Successful!")
     return HttpResponse("successful")
+
+@csrf_exempt
+def stamp(request, user_id):
+    if request.method == 'GET':
+        return render(request, "line_bot/stamp_data.html", {
+            "stamp": stamp
+        })
