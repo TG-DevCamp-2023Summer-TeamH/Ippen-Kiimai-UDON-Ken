@@ -80,7 +80,7 @@ def create_message(message):
     elif message[0] == '2':
         return
     
-    elif message == '3':
+    elif message[0] == '3':
             filename = 'tourist-attraction.csv'
             def parse_hours(hours_str):
                 parsed_hours = []
@@ -136,11 +136,10 @@ def create_message(message):
                         index = i
                         if pickedata[15] < pickedata[i][15]: 
 
-                         for i in pickedata:
-                            text += "\n" + i[1]
-                         data = [{"type": "text", "text": text}]
-                         if len(data) > 0:
-                             return data
+                            for i in pickedata:
+                                text += "\n" + i[1]
+                        data = [{"type": "text", "text": text}]
+                        return data
                 else:
                     if message[2] == '0':
                         data = takamatuCity()
@@ -162,29 +161,30 @@ def create_message(message):
             weathercode = weather_data.get("timeSeries")[0].get("areas")[0].get("wheatherCodes")[0]
             if weathercode in weathercode_list:
                 print('屋外の観光スポットは以下の通りです。\n')
+                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
                 print(data)
                 return data
             else:
                 print('屋内の観光スポットは以下の通りです。\n')
                 print(data)
                 return data
-       
-    elif message == '4':
-           def load_data():
-               data = []
-               with open(csv_file, 'r', encoding='utf-8') as f:
-                   lines = f.readlines()
-                   for line in lines:
-                       items = line.sprit().split('\t')
-                       product = {
-                           "商品の名前": items[0],
-                           "カテゴリID": items[1],
-                           "カテゴリ名": items[2],
-                           "金額": items[3],
-                           "ECサイト": items[4]
-                       }
-                       data.append(product)
-                       return data
+
+    elif message[0] == '4':
+        def load_data():
+            data = []
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                for line in lines:
+                    items = line.sprit().split('\t')
+                    product = {
+                        "商品の名前": items[0],
+                        "カテゴリID": items[1],
+                        "カテゴリ名": items[2],
+                        "金額": items[3],
+                        "ECサイト": items[4]
+                        }
+                    data.append(product)
+                return data
 
     def display_products_by_category(category_id):
         products = []
