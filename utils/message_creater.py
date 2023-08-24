@@ -173,7 +173,7 @@ def create_message(message):
     elif message[0] == '4':
         def load_data():
             data = souvenir()
-            products = souvenir
+            products = souvenir()
             for product in products:
                     data.append({
                         "商品の名前": souvenir[0],
