@@ -5,6 +5,7 @@ import json
 
 REPLY_ENDPOINT_URL = "https://api.line.me/v2/bot/message/reply"
 ACCESSTOKEN = 'gASBNZY+U6ZNrhCZYa3tou5dX6+Seue+Yq3QvbZ3n4Wfb1/Pc9OS9z+XJ+WFJUn3poHbntob1k2G7NAPqyqrwlVxw38DHOq2K4nRO3i2wXW0CvjBuooHNL5Qva2yPV/0bDlW4lEhqwKq8mT+icJRigdB04t89/1O/w1cDnyilFU='
+
 HEADER = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + ACCESSTOKEN
