@@ -89,13 +89,13 @@ def create_message(message, user_id):
         return data
     
     elif message[0] == '3':
-        current_day = datetime.datetime.now().strftime("%A")
+        current_day = int(datetime.datetime.now().strftime("%A"))
         url = 'https://www.jma.go.jp/bosai/forecast/data/overview_forecast/370000.json'     #気象庁API（天気概要）
         response = requests.get(url)
         weather_data = response.json()
             #weathercodeで場合分け
         weathercode_list = ["102", "103", "104", "105", "106", "107", "108", "112", "113", "114", "115", "116", "117", "118", "119", "123", "124", "125", "126", "140", "160", "170", "181", "202", "203", "204", "205", "206", "207", "208", "212", "213", "214", "215", "216", "217", "218", "219", "224", "228", "240", "250", "260", "270", "281", "300", "301", "302", "303", "304", "306", "308", "309", "311", "313", "314", "315", "316", "317", "322", "328", "329", "340", "350", "371", "400", "401", "402", "403", "405", "406", "407", "409", "413", "414", "422", "423", "425", "426", "427", "450"]
-        weathercode = weather_data.get("timeSeries")[0].get("areas")[0].get("wheatherCodes")[0]
+        weathercode = int(weather_data.get("timeSeries")[0].get("areas")[0].get("wheatherCodes")[0])
         if message[4].isdecimal() or message[4] == 'a':
                 pickedata = []
                 text = "エリア内には以下のスポットがあります。"
