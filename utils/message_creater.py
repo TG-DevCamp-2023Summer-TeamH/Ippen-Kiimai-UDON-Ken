@@ -11,13 +11,13 @@ import datetime
 from geopy.distance import geodesic
 
 def create_message(message, user_id):
+    now = datetime.datetime.now()
+    now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
+    now_time = int(now_time)
     if message[0] == '1':
         if message[4].isdecimal() or message[4] == 'a':
-            now = datetime.datetime.now()
             day = {0: 21, 1: 25, 2: 29, 3: 33, 4: 37, 5: 41, 6: 17}
             today_row = day[now.weekday()]
-            now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
-            now_time = int(now_time)
             text = "エリア内現在営業中店舗のトップ5に絞って出力しています。"
             if message[5] == 'm':
                 text = "前回使用条件の営業日を明日に変えて再検索したものを出力しています。"
@@ -111,7 +111,6 @@ def create_message(message, user_id):
 
             data = spotData()
             for line in data:
-                    day, hours_str = line.strip().split(",")
                     if day == current_day:
                         if hours_str:
                             opening_hours = parse_hours(hours_str)
