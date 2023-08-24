@@ -53,7 +53,7 @@ def kagawa():
        return data
 
 def takamatuCity():
-       data2 = [ 
+       data = [ 
        {
                 "type": "text",
                 "text": "以下よりエリア名を選択してください。",
@@ -120,10 +120,10 @@ def takamatuCity():
                 }
             }
         ]
-       return data2
+       return data
 
 def chusan():
-        data3 = [ 
+        data = [ 
        {
                 "type": "text",
                 "text": "以下よりエリア名を選択してください。",
@@ -198,10 +198,10 @@ def chusan():
                 }
             }
         ]
-        return data3
+        return data
 
 def seisan():
-       data4 = [ 
+       data = [ 
        {
                 "type": "text",
                 "text": "以下よりエリア名を選択してください。",
@@ -228,10 +228,10 @@ def seisan():
                 }
             }
         ]
-       return data4
+       return data
 
 def tousan():
-       data5 = [ 
+       data = [ 
        {
                 "type": "text",
                 "text": "以下よりエリア名を選択してください。",
@@ -266,10 +266,10 @@ def tousan():
                 }
             }
         ]
-       return data5
+       return data
 
 def shima():
-       data6 = [ 
+       data = [ 
        {
                 "type": "text",
                 "text": "以下よりエリア名を選択してください。",
@@ -304,7 +304,7 @@ def shima():
                 }
             }
         ]
-       return data6
+       return data
 
        
         
