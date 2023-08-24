@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima
-from .templates.souvenir_templates import category
+from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima, spotData
+from .templates.souvenir_templates import category, souvenir
 import json          #json形式の読み込み
 import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
