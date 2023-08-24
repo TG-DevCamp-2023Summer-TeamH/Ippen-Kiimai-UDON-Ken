@@ -101,6 +101,7 @@ def create_message(message):
                 return False
             
             csv_file = "tourist_attraction.csv"
+
             current_day = datetime.datetime.now().strftime("%A")
             current_time = datetime.datetime.now().time()
 
