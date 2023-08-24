@@ -78,6 +78,7 @@ def create_message(message):
         return
     
     elif message == '3':
+            filename = 'tourist-attraction.csv'
             def parse_hours(hours_str):
                 parsed_hours = []
                 for time_range in hours_str.split():
@@ -135,6 +136,8 @@ def create_message(message):
                          for i in pickedata:
                             text += "\n" + i[1]
                          data = [{"type": "text", "text": text}]
+                         if len(data) > 0:
+                             return data
                 else:
                     if message[2] == '0':
                         data = takamatuCity()
@@ -157,24 +160,16 @@ def create_message(message):
             if weathercode in weathercode_list:
                 print('屋外の観光スポットは以下の通りです。\n')
                 print(data)
-            
+                return data
             else:
                 print('屋内の観光スポットは以下の通りです。\n')
                 print(data)
-            
-
-            #csvを読み込んで一旦全ての観光地を表示。
-            filename = 'tourist-attraction.csv'
-            with open(filename, encoding='utf-8', newline='') as f:
-                csvreader = csv.reader(f, quotechar="'", quoting=csv.QUOTE_NONNUMERIC)
-                for row in csvreader:
-                    print(row)
-                return
-    
+                return data
+       
     elif message == '4':
            def load_data():
                data = []
-               with open(csv_file, 'r', encoding='utf-8') as file:
+               with open(csv_file, 'r', encoding='utf-8') as f:
                    lines = f.readlines()
                    for line in lines:
                        items = line.sprit().split('\t')
@@ -218,3 +213,4 @@ def create_message(message):
 
     if __name__ == '__main__':
         data = load_data()
+        return data
