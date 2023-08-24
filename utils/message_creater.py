@@ -54,14 +54,17 @@ def create_message(message):
                     tmp = pickdata[i]
                     pickdata[i] = pickdata[index]
                     pickdata[index] = tmp
-                emoji = {0: '🥇', 1: '🥈', 2:'🥉'}
+                text = "エリア内現在営業中店舗のトップ5に絞って出力しています。\n\n香川県のうどん屋は玉数がなくなり次第終了という店舗が多いため、営業中と書かれていてもすでに営業が終了している場合がございます。\n予めご了承ください。"
                 for i in range(len(pickdata)):
-                    if i >= 3:
+                    if i >= 5:
                         break
-                    text += "\n" + emoji[i] + pickdata[i][1]
+                    text += "\n\n" + str(i + 1) + "位 " + pickdata[i][1] + "\n" + pickdata[i][13] + "\n☆" + pickdata[i][15] + " (" + pickdata[i][16] + "件の口コミ)\n" + pickdata[i][today_row] + ":{:02}".format(pickdata[i][today_row + 1]) + " ～ " + pickdata[i][today_row + 2] + ":{:02}\n".format(pickdata[i][today_row + 3]) + pickdata[i][14]
+                print(text)
+                
+                data = [{"type": "text", "text": text}]
             else:
                 text += "\n該当する施設が見つかりませんでした。"
-            data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
+                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
         else:
             if message[2] == '0':
                 data = u_tak()
@@ -154,7 +157,7 @@ def create_message(message):
             url = 'https://www.jma.go.jp/bosai/forecast/data/overview_forecast/370000.json'     #気象庁API（天気概要）
             response = requests.get(url)
             weather_data = response.json()
-                   #weathercodeで場合分け
+            #weathercodeで場合分け
             weathercode_list = ["102", "103", "104", "105", "106", "107", "108", "112", "113", "114", "115", "116", "117", "118", "119", "123", "124", "125", "126", "140", "160", "170", "181", "202", "203", "204", "205", "206", "207", "208", "212", "213", "214", "215", "216", "217", "218", "219", "224", "228", "240", "250", "260", "270", "281", "300", "301", "302", "303", "304", "306", "308", "309", "311", "313", "314", "315", "316", "317", "322", "328", "329", "340", "350", "371", "400", "401", "402", "403", "405", "406", "407", "409", "413", "414", "422", "423", "425", "426", "427", "450"]
             weathercode = weather_data.get("timeSeries")[0].get("areas")[0].get("wheatherCodes")[0]
             if weathercode in weathercode_list:
