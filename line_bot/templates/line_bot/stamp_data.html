@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>うどんスタンプラリー｜いっぺん来ぃまいうどん県</title>
+    <style>
+        .br {
+            text-align: center;
+            font-family: sans-serif;
+        }
+        .small {
+            font-size: smaller;
+        }
+        .br span {
+            display: inline-block;
+        }
+        .shops {
+            text-align: center;
+        }
+        .shops div {
+            display: inline-block;
+        }
+        .shop {
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .shop img {
+            width: 15vw;
+        }
+        .shop p {
+            font-size: 10px;
+            width: 30vw
+        }
+        h3 {
+            font-family: sans-serif;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p class="br"><span>ようこそ、</span><span>{{ nickname }} さん。</span></h1>
+        <h2 class="br" style="margin-top: -20px;"><span style="font-size: 50px;">{{ num }}</span> / 183店舗獲得！</h2>
+    </header>
+    <div id="get-shop" class="shops">
+        <h3>獲得した店舗</h3>
+    {% for shop in stamp_shop %}
+        <div class="shop">
+            <img src="https://s3.ap-northeast-1.amazonaws.com/teraddition.blog.photos/wp-content/uploads/2023/08/24221321/food_udon_kake.png" alt="stamp">
+            <p>{{ shop }}</p>
+        </div>
+    {% endfor %}
+    </div>
+    <div id="no-get-shop" class="shops">
+        <h3>獲得していない店舗</h3>
+        {% for shop in no_stamp_shop %}
+        <div class="shop">
+            <img src="https://s3.ap-northeast-1.amazonaws.com/teraddition.blog.photos/wp-content/uploads/2023/08/24222125/food_udon_kake_mono.png" alt="stamp">
+            <p>{{ shop }}</p>
+        </div>
+    {% endfor %}
+    </div>
+</body>
+</html>

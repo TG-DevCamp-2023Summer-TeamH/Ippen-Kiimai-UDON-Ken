@@ -305,7 +305,7 @@ def u_hig():
     return data
 
 def today_tomorrow(large, small):
-    data = [{
+    data = {
         "items": [
             {
                 "type": "action",
@@ -324,7 +324,7 @@ def today_tomorrow(large, small):
                 }
             }
         ]
-    }]
+    }
     return data
 
 def shopData():
