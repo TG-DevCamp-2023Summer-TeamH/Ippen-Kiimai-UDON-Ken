@@ -101,9 +101,9 @@ def create_message(message):
                     
                 return False
             
-            csv_file = "tourist_attraction.csv"
-            current_day = datetime.now().strftime("%A")
-            current_time = datetime.now().time()
+            csv_file = "line_bot/tourist_attractiondata.csv"
+            current_day = datetime.datetime.now().strftime("%A")
+            current_time = datetime.datetime.now().time()
 
             with open(csv_file, "r") as file:
                 lines = file.readlines()[1:]
