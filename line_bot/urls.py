@@ -5,5 +5,5 @@ app_name = "line_bot"
 
 urlpatterns = [
     path('', views.index),
-    path('stamp/', views.stamp, name="stampdata")
+    path('stamp/<slug:user_id>', views.stamp, name="stampdata")
 ]
