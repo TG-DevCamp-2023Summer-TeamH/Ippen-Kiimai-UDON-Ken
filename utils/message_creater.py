@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima, spotData
-from .templates.souvenir_templates import category, souvenir
-from datetime import datetime
+from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima
+from .templates.souvenir_templates import category
 import json          #json形式の読み込み
 import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
 from .templates.search_templates import u_pref, u_tak, u_chu, u_nis, u_hig, shopData, today_tomorrow
+from .templates.stamp_templates import stamp_call
 import datetime
 from geopy.distance import geodesic
 
-def create_message(message):
+def create_message(message, user_id):
     if message[0] == '1':
         if message[4].isdecimal() or message[4] == 'a':
             now = datetime.datetime.now()
@@ -18,18 +18,21 @@ def create_message(message):
             today_row = day[now.weekday()]
             now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
             now_time = int(now_time)
+            text = "エリア内現在営業中店舗のトップ5に絞って出力しています。"
             if message[5] == 'm':
+                text = "前回使用条件の営業日を明日に変えて再検索したものを出力しています。"
                 if now.weekday() == 6:
                     today_row -= 24
                 else:
                     today_row += 4
                 now_time = 1200
             elif message[5] == 'd':
+                text = "前回使用条件の営業日を本日に変えて再検索したものを出力しています。"
                 now_time = 1200
             print(now_time)
             filedata = shopData()
             pickdata = []
-            text = "エリア内現在営業中店舗のトップ3に絞って出力しています。\n\n香川県のうどん屋は玉数がなくなり次第終了という店舗が多いため、営業中と書かれていてもすでに営業が終了している場合がございます。\n予めご了承ください。\n"
+            text += "\n\n香川県のうどん屋は玉数がなくなり次第終了という店舗が多いため、営業中と書かれていてもすでに営業が終了している場合がございます。\n予めご了承ください。\n"
             if message[4] == 'a':
                 if message[2] == 'a':
                     for i in filedata:
@@ -55,14 +58,13 @@ def create_message(message):
                     tmp = pickdata[i]
                     pickdata[i] = pickdata[index]
                     pickdata[index] = tmp
-                text = "エリア内現在営業中店舗のトップ5に絞って出力しています。\n\n香川県のうどん屋は玉数がなくなり次第終了という店舗が多いため、営業中と書かれていてもすでに営業が終了している場合がございます。\n予めご了承ください。"
                 for i in range(len(pickdata)):
                     if i >= 5:
                         break
                     text += "\n\n" + str(i + 1) + "位 " + pickdata[i][1] + "\n" + pickdata[i][13] + "\n☆" + pickdata[i][15] + " (" + pickdata[i][16] + "件の口コミ)\n" + pickdata[i][today_row] + ":{:02}".format(pickdata[i][today_row + 1]) + " ～ " + pickdata[i][today_row + 2] + ":{:02}\n".format(pickdata[i][today_row + 3]) + pickdata[i][14]
                 print(text)
                 
-                data = [{"type": "text", "text": text}]
+                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
             else:
                 text += "\n該当する施設が見つかりませんでした。"
                 data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
@@ -78,10 +80,9 @@ def create_message(message):
             else:
                 data = u_pref()
         return data
-
+    
     elif message[0] == '2':
-        text = "うどんスタンプラリーへようこそ！"
-        data = [{"type": "text", "text": text, "quickReply": {"items": [{"type": "action", "action": {"type": "location", "label": "現在地を送信してスタンプを押す"}}]}}]
+        data = stamp_call(user_id)
         return data
     
     elif message[0] == '3':
