@@ -8,6 +8,7 @@ import csv          #csvの読み込み
 import requests      #気象庁API読み込みに使用
 from .templates.search_templates import u_pref, u_tak, u_chu, u_nis, u_hig, shopData, today_tomorrow
 import datetime
+from geopy.distance import geodesic
 
 def create_message(message):
     if message[0] == '1':
@@ -77,8 +78,11 @@ def create_message(message):
             else:
                 data = u_pref()
         return data
+
     elif message[0] == '2':
-        return
+        text = "うどんスタンプラリーへようこそ！"
+        data = [{"type": "text", "text": text, "quickReply": {"items": [{"type": "action", "action": {"type": "location", "label": "現在地を送信してスタンプを押す"}}]}}]
+        return data
     
     elif message[0] == '3':
             def parse_hours(hours_str):

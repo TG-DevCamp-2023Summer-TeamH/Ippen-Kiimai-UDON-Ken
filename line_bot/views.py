@@ -8,7 +8,7 @@ from line_bot.line_message import LineMessage
 import requests
 
 ACCESSTOKEN = 'gASBNZY+U6ZNrhCZYa3tou5dX6+Seue+Yq3QvbZ3n4Wfb1/Pc9OS9z+XJ+WFJUn3poHbntob1k2G7NAPqyqrwlVxw38DHOq2K4nRO3i2wXW0CvjBuooHNL5Qva2yPV/0bDlW4lEhqwKq8mT+icJRigdB04t89/1O/w1cDnyilFU='
-HEADER = {
+headers = {
     'Authorization': 'Bearer ' + ACCESSTOKEN
 }
 
@@ -19,7 +19,7 @@ def index(request):
         data = request['events'][0]
         if data["type"] == "follow":
             user_id = data["source"]["userId"]
-            response = requests.get("https://api.line.me/v2/bot/profile/" + user_id, header = HEADER)
+            response = requests.get("https://api.line.me/v2/bot/profile/" + user_id, headers=headers)
             user_data = response.json()
             print(user_data)
             nickname = user_data["displayName"]
@@ -34,7 +34,7 @@ def index(request):
                     id = user.id
             user = LINEFollower.objects.get(id = id)
             user.delete()
-        else:
+        elif data["type"] == "message":
             message = data['message']
             reply_token = data['replyToken']
             message_detail = message['text']
