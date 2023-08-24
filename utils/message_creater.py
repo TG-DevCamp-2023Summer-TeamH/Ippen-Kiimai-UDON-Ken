@@ -81,7 +81,6 @@ def create_message(message):
         return
     
     elif message[0] == '3':
-            filename = 'tourist-attraction.csv'
             def parse_hours(hours_str):
                 parsed_hours = []
                 for time_range in hours_str.split():
@@ -101,7 +100,8 @@ def create_message(message):
                     
                 return False
             
-            csv_file = "line_bot/tourist_attractiondata.csv"
+            csv_file = "tourist_attraction.csv"
+
             current_day = datetime.datetime.now().strftime("%A")
             current_time = datetime.datetime.now().time()
 
@@ -120,7 +120,7 @@ def create_message(message):
                             print("観光スポットは営業していません。")
                         break
             if message[4].isdecimal() or message[4] == 'a':
-                filedata = filename()
+                filedata = csv_file()
                 pickedata = []
                 text = "エリア内には以下のスポットがあります。"
                 if message[4] == 'a':
