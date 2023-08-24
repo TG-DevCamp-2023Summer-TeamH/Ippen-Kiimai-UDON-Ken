@@ -51,14 +51,17 @@ def create_message(message):
                     tmp = pickdata[i]
                     pickdata[i] = pickdata[index]
                     pickdata[index] = tmp
-                emoji = {0: '🥇', 1: '🥈', 2:'🥉'}
+                text = "エリア内現在営業中店舗のトップ5に絞って出力しています。\n\n香川県のうどん屋は玉数がなくなり次第終了という店舗が多いため、営業中と書かれていてもすでに営業が終了している場合がございます。\n予めご了承ください。"
                 for i in range(len(pickdata)):
-                    if i >= 3:
+                    if i >= 5:
                         break
-                    text += "\n" + emoji[i] + pickdata[i][1]
+                    text += "\n\n" + str(i + 1) + "位 " + pickdata[i][1] + "\n" + pickdata[i][13] + "\n☆" + pickdata[i][15] + " (" + pickdata[i][16] + "件の口コミ)\n" + pickdata[i][today_row] + ":{:02}".format(pickdata[i][today_row + 1]) + " ～ " + pickdata[i][today_row + 2] + ":{:02}\n".format(pickdata[i][today_row + 3]) + pickdata[i][14]
+                print(text)
+                
+                data = [{"type": "text", "text": text}]
             else:
                 text += "\n該当する施設が見つかりませんでした。"
-            data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
+                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
         else:
             if message[2] == '0':
                 data = u_tak()
