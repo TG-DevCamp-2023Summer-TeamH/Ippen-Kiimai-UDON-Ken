@@ -87,96 +87,95 @@ def create_message(message, user_id):
         return data
     
     elif message[0] == '3':
-        current_day = int(datetime.datetime.now().strftime("%A"))
-        url = 'https://www.jma.go.jp/bosai/forecast/data/overview_forecast/370000.json'     #気象庁API（天気概要）
-        response = requests.get(url)
-        weather_data = response.json()
+        current_day = now.weekday()
+        url = 'https://www.jma.go.jp/bosai/forecast/data/forecast/370000.json'     #気象庁API（天気概要）
+        response = requests.get(url).json()
             #weathercodeで場合分け
         weathercode_list = ["102", "103", "104", "105", "106", "107", "108", "112", "113", "114", "115", "116", "117", "118", "119", "123", "124", "125", "126", "140", "160", "170", "181", "202", "203", "204", "205", "206", "207", "208", "212", "213", "214", "215", "216", "217", "218", "219", "224", "228", "240", "250", "260", "270", "281", "300", "301", "302", "303", "304", "306", "308", "309", "311", "313", "314", "315", "316", "317", "322", "328", "329", "340", "350", "371", "400", "401", "402", "403", "405", "406", "407", "409", "413", "414", "422", "423", "425", "426", "427", "450"]
-        weathercode = int(weather_data.get("timeSeries")[0].get("areas")[0].get("wheatherCodes")[0])
+        weathercode = int(response[0]["timeSeries"][0]["areas"][0]["weatherCodes"][0])
+        print(weathercode)
         if message[2].isdecimal() or message[2] == '2':
-                pickedata = []
-                text = "エリア内には以下のスポットがあります。"
-                if message[4] == 'a':
-                    for i in filedata:
-                        if message[2] == i[5]:
-                            pickedata.append(i)
-                else:
-                    for i in filedata:
-                        if message[2] == i[5] and message[4] == i[8]:
-                            pickedata.append(i)
-                for i in range(len(pickedata)):
-                    for l in range(i, len(pickedata)):
-                        index = i
-                        if pickedata[15] < pickedata[i][15]: 
+            pickedata = []
+            text = "エリア内には以下のスポットがあります。"
+            if message[4] == 'a':
+                for i in filedata:
+                    if message[2] == i[5]:
+                        pickedata.append(i)
+            else:
+                for i in filedata:
+                    if message[2] == i[5] and message[4] == i[8]:
+                        pickedata.append(i)
+            for i in range(len(pickedata)):
+                for l in range(i, len(pickedata)):
+                    index = i
+                    if pickedata[15] < pickedata[i][15]: 
 
-                            for i in pickedata:
-                                text += "\n" + i[1]
-                        data = [{"type": "text", "text": text}]
-                        return data
-                else:
-                    if message[2] == '0':
-                        data = takamatuCity()
-                    elif message[2] == '1':
-                        data =  chusan()
-                    elif message[2] == '2':
-                        data = seisan()
-                    elif message[2] == '3':
-                        data = tousan()
-                    else:
-                        data = shima()
+                        for i in pickedata:
+                            text += "\n" + i[1]
+                    data = [{"type": "text", "text": text}]
                     return data
+            else:
+                if message[2] == '0':
+                    data = takamatuCity()
+                elif message[2] == '1':
+                    data =  chusan()
+                elif message[2] == '2':
+                    data = seisan()
+                elif message[2] == '3':
+                    data = tousan()
+                else:
+                    data = shima()
+                return data
 
         def parse_hours(hours_str):
-                parsed_hours = []
-                for time_range in hours_str.split():
-                    start_time, end_time = time_range.split("-")
-                    start_hour, start_minute = map(int, end_time.split(":"))
-                    end_hour, end_minute = map(int, end_time.split(":"))
-                    parsed_hours.append((start_hour, start_minute, end_hour, end_minute))
-                return parsed_hours
+            parsed_hours = []
+            for time_range in hours_str.split():
+                start_time, end_time = time_range.split("-")
+                start_hour, start_minute = map(int, end_time.split(":"))
+                end_hour, end_minute = map(int, end_time.split(":"))
+                parsed_hours.append((start_hour, start_minute, end_hour, end_minute))
+            return parsed_hours
             
         def is_shop_open(opening_hours, current_time):
-                for start_hour, start_minute, end_hour, end_minute in opening_hours:
-                    start_time = datetime.strptime(f"{start_hour:02d}:{start_minute:02d}", "%H:%M").time()
-                    end_time = datetime.strptime(f"{end_hour:02d}:{end_minute:02d}", "%H:%M").time()
-
-                    if start_time <= current_time <= end_time:
-                        return True
-                    
-                return False
+            for start_hour, start_minute, end_hour, end_minute in opening_hours:
+                start_time = datetime.strptime(f"{start_hour:02d}:{start_minute:02d}", "%H:%M").time()
+                end_time = datetime.strptime(f"{end_hour:02d}:{end_minute:02d}", "%H:%M").time()
+                return start_time <= current_time and current_time <= end_time
+            return False
             
         data = spotData()
         for line in data:
-                    if day == current_day:
-                        if now_time:
-                            opening_hours = parse_hours(now_time)
-                            if is_shop_open(opening_hours, now_time):
-                                print(f"観光スポットは{now.weekday}に現在営業しています。")
-                            else:
-                                print(f"観光スポットは{now.weekday}に現在営業していません。")
-                        else:
-                            print("観光スポットは定休日です。")
-                        break
+            if day == current_day:
+                if now_time:
+                    opening_hours = parse_hours(now_time)
+                    if is_shop_open(opening_hours, now_time):
+                        print(f"観光スポットは{now.weekday}に現在営業しています。")
+                    else:
+                        print(f"観光スポットは{now.weekday}に現在営業していません。")
+                else:
+                    print("観光スポットは定休日です。")
+                break
 
         if weathercode in weathercode_list:
-                print('屋外の観光スポットは以下の通りです。\n')
-                data = [{"type": "text", "text": text}]
-                print(data)
-                return data
+            print('屋外の観光スポットは以下の通りです。\n')
+            data = [{"type": "text", "text": text}]
+            print(data)
+            return data
         else:
-                print('屋内の観光スポットは以下の通りです。\n')
-                data = [{"type": "text", "text": text,}]
-                print(data)
-                return data
+            print('屋内の観光スポットは以下の通りです。\n')
+            data = [{"type": "text", "text": text,}]
+            print(data)
+            return data
 
     elif message[0] == '4':
-        def load_data():
-            data = []
-            products = souvenir()
-                    data = [{"type": "text", "text": text}]
-                    data.append(product)
-            return data
+        text = "お土産リスト"
+        products = souvenir()
+        print(products)
+        for i in products:
+            print(i)
+            text += "\n\n" + i[1] + "\n" + i[5]
+        data = [{"type": "text", "text": text}]
+        return data
 
     def display_products_by_category(category_id, data):
         products = []
