@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima, spotData
+from .templates.tourist_attractiondata import takamatuCity, chusan, seisan, tousan, shima, spotData, kagawa, weather, noweather
 from .templates.souvenir_templates import category, souvenir
 import json          #json形式の読み込み
 import csv          #csvの読み込み
@@ -15,12 +15,12 @@ def create_message(message, user_id):
     now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
     now_time = int(now_time)
     day = {0: 21, 1: 25, 2: 29, 3: 33, 4: 37, 5: 41, 6: 17}
+    today_row = day[now.weekday()]
     if message[0] == '1':
         if message[4].isdecimal() or message[4] == 'a':
-            today_row = day[now.weekday()]
             now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
             now_time = int(now_time)
-            text = "エリア内現在営業中店舗のトップ5に絞って出力しています。"
+            text = "エリア内現在営業中店舗のトップ5を出力しています。"
             if message[5] == 'm':
                 text = "前回使用条件の営業日を明日に変えて再検索したものを出力しています。"
                 if now.weekday() == 6:
@@ -65,10 +65,9 @@ def create_message(message, user_id):
                         break
                     text += "\n\n" + str(i + 1) + "位 " + pickdata[i][1] + "\n" + pickdata[i][13] + "\n☆" + pickdata[i][15] + " (" + pickdata[i][16] + "件の口コミ)\n" + pickdata[i][today_row] + ":{:02}".format(pickdata[i][today_row + 1]) + " ～ " + pickdata[i][today_row + 2] + ":{:02}\n".format(pickdata[i][today_row + 3]) + pickdata[i][14]
                 print(text)
-                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
             else:
                 text += "\n該当する施設が見つかりませんでした。"
-                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
+            data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
         else:
             if message[2] == '0':
                 data = u_tak()
@@ -88,84 +87,70 @@ def create_message(message, user_id):
     
     elif message[0] == '3':
         current_day = now.weekday()
-        url = 'https://www.jma.go.jp/bosai/forecast/data/forecast/370000.json'     #気象庁API（天気概要）
-        response = requests.get(url).json()
-            #weathercodeで場合分け
-        weathercode_list = ["102", "103", "104", "105", "106", "107", "108", "112", "113", "114", "115", "116", "117", "118", "119", "123", "124", "125", "126", "140", "160", "170", "181", "202", "203", "204", "205", "206", "207", "208", "212", "213", "214", "215", "216", "217", "218", "219", "224", "228", "240", "250", "260", "270", "281", "300", "301", "302", "303", "304", "306", "308", "309", "311", "313", "314", "315", "316", "317", "322", "328", "329", "340", "350", "371", "400", "401", "402", "403", "405", "406", "407", "409", "413", "414", "422", "423", "425", "426", "427", "450"]
-        weathercode = int(response[0]["timeSeries"][0]["areas"][0]["weatherCodes"][0])
-        print(weathercode)
-        if message[2].isdecimal() or message[2] == '2':
-            pickedata = []
-            text = "エリア内には以下のスポットがあります。"
+        if message[4].isdecimal() or message[4] == 'a':
+            text = "エリア内の観光スポットトップ5を出力しています。\n\n"
+            if message[5] != "w":
+                url = 'https://www.jma.go.jp/bosai/forecast/data/forecast/370000.json'     #気象庁API（天気概要）
+                response = requests.get(url).json()
+                weathercode_list = ["102", "103", "104", "105", "106", "107", "108", "112", "113", "114", "115", "116", "117", "118", "119", "123", "124", "125", "126", "140", "160", "170", "181", "202", "203", "204", "205", "206", "207", "208", "212", "213", "214", "215", "216", "217", "218", "219", "224", "228", "240", "250", "260", "270", "281", "300", "301", "302", "303", "304", "306", "308", "309", "311", "313", "314", "315", "316", "317", "322", "328", "329", "340", "350", "371", "400", "401", "402", "403", "405", "406", "407", "409", "413", "414", "422", "423", "425", "426", "427", "450"]
+                weathercode = response[0]["timeSeries"][0]["areas"][0]["weatherCodes"][0]
+                reply = noweather(message[2], message[4])
+                if weathercode in weathercode_list:
+                    text += "本日の天気は雨または雪予報ですので、屋内の観光スポットに絞っています。\n"
+                    allplacedata = spotData()
+                    placedata = []
+                    for place in allplacedata:
+                        if place[17] == "屋内":
+                            placedata.append(place)
+                else:
+                    text += "屋内外の観光スポットを表示しています。\n"
+                    placedata = spotData()
+            else:
+                text += "屋内外の観光スポットを表示しています。\n"
+                placedata = spotData()
+                reply = weather(message[2], message[4])
+            for i in range(len(placedata)):
+                index = i
+                for l in range(i, len(placedata)):
+                    if placedata[index][15] < placedata[l][15]:
+                        index = l
+                tmp = placedata[i]
+                placedata[i] = placedata[index]
+                placedata[index] = tmp
+            pickdata = []
             if message[4] == 'a':
-                for i in filedata:
-                    if message[2] == i[5]:
-                        pickedata.append(i)
-            else:
-                for i in filedata:
-                    if message[2] == i[5] and message[4] == i[8]:
-                        pickedata.append(i)
-            for i in range(len(pickedata)):
-                for l in range(i, len(pickedata)):
-                    index = i
-                    if pickedata[15] < pickedata[i][15]: 
-
-                        for i in pickedata:
-                            text += "\n" + i[1]
-                    data = [{"type": "text", "text": text}]
-                    return data
-            else:
-                if message[2] == '0':
-                    data = takamatuCity()
-                elif message[2] == '1':
-                    data =  chusan()
-                elif message[2] == '2':
-                    data = seisan()
-                elif message[2] == '3':
-                    data = tousan()
+                if message[2] == 'a':
+                    pickdata = placedata
                 else:
-                    data = shima()
-                return data
-
-        def parse_hours(hours_str):
-            parsed_hours = []
-            for time_range in hours_str.split():
-                start_time, end_time = time_range.split("-")
-                start_hour, start_minute = map(int, end_time.split(":"))
-                end_hour, end_minute = map(int, end_time.split(":"))
-                parsed_hours.append((start_hour, start_minute, end_hour, end_minute))
-            return parsed_hours
-            
-        def is_shop_open(opening_hours, current_time):
-            for start_hour, start_minute, end_hour, end_minute in opening_hours:
-                start_time = datetime.strptime(f"{start_hour:02d}:{start_minute:02d}", "%H:%M").time()
-                end_time = datetime.strptime(f"{end_hour:02d}:{end_minute:02d}", "%H:%M").time()
-                return start_time <= current_time and current_time <= end_time
-            return False
-            
-        data = spotData()
-        for line in data:
-            if day == current_day:
-                if now_time:
-                    opening_hours = parse_hours(now_time)
-                    if is_shop_open(opening_hours, now_time):
-                        print(f"観光スポットは{now.weekday}に現在営業しています。")
-                    else:
-                        print(f"観光スポットは{now.weekday}に現在営業していません。")
-                else:
-                    print("観光スポットは定休日です。")
-                break
-
-        if weathercode in weathercode_list:
-            print('屋外の観光スポットは以下の通りです。\n')
-            data = [{"type": "text", "text": text}]
-            print(data)
-            return data
+                    for i in placedata:
+                        if i[5] == message[2]:
+                            pickdata.append(i)
+            else:
+                for i in placedata:
+                    if i[5] == message[2] and i[8] == message[4]:
+                        pickdata.append(i)
+            if len(pickdata) != 0:
+                for i in range(len(pickdata)):
+                    if i >= 5:
+                        break
+                    text += "\n\n" + str(i + 1) + "位 " + pickdata[i][1] + "\n" + pickdata[i][13] + "\n☆" + pickdata[i][15] + " (" + pickdata[i][16] + "件の口コミ)\n" + pickdata[i][today_row + 2] + ":{:02}".format(pickdata[i][today_row + 3]) + " ～ " + pickdata[i][today_row + 4] + ":{:02}\n".format(pickdata[i][today_row + 5]) + pickdata[i][14]
+            else:
+                text += "\n\n該当する施設が見つかりませんでした。"
+            data = [{"type": "text", "text": text, "quickReply": reply}]
         else:
-            print('屋内の観光スポットは以下の通りです。\n')
-            data = [{"type": "text", "text": text,}]
-            print(data)
-            return data
+            if message[2] == '0':
+                data = takamatuCity()
+            elif message[2] == '1':
+                data =  chusan()
+            elif message[2] == '2':
+                data = seisan()
+            elif message[2] == '3':
+                data = tousan()
+            elif message[2] == '4':
+                data = shima()
+            else:
+                data = kagawa()
+        return data
 
     elif message[0] == '4':
         text = "お土産リスト"
