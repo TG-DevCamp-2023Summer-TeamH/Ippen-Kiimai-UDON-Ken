@@ -154,68 +154,24 @@ def create_message(message, user_id):
 
     elif message[0] == '4':
         products = souvenir()
-        category_id = products[2]
-        
-        text = "お土産リスト\n※価格は作成時にECサイトで表示されている最安値価格を使用しております。値上げなどがされている場合はご容赦ください。"
+        pickdata = []
+        text = "選択した条件のお土産を最大5件ピックアップしました.\n\n価格は作成時にECサイトで表示されている最安値価格を使用しております。値上げなどがされている場合はご容赦ください。\n"
         print(products)
-        for i in products:
-            if category_id[2] == '1':
-                text = '焼き菓子のお土産一覧です。'
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-            elif category_id[2] == '2':
-                text = "和菓子のお土産一覧です。"
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-            elif category_id[2] == '3':
-                text = "麵類のお土産一覧です。"
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-            elif category_id[2] == '4':
-                text = "飲み物のお土産一覧です。"
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-            elif category_id[2] == '5':
-                text = "調味料・食品のお土産一覧です。"
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-            elif category_id[2] == '6':
-                text = "骨付きどりのお土産一覧です。"
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
+        if message[2].isdecimal():
+            if message[2] == "0":
+                pickdata = products
             else:
-                text = "スナック菓子お土産一覧です。"
-                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-            print(i)
-            text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-        data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
-        return data
-
-    def display_products_by_category(category_id, data):
-        products = []
-        for product in data:
-            if product["カテゴリID"] == category_id:
-                products.append(product)
-        return products
-    
-    def handle_message(event):
-        user_input = event.message.text
-
-        found_products = display_products_by_category(user_input, data)
-
-        if found_products:
-            reply_message = ''
-            for product in found_products:
-                reply_message += f"商品名: {product['商品の名前']}, 金額: {product['金額']}円, ECサイトリンク: {product['ECサイト']}\n\n"
-                
-            category(
-                event.reply_token,
-                text = reply_message
-            )
-        
+                for i in products:
+                    if i[2] == message[2]:
+                        pickdata.append(i)
+            if len(pickdata) != 0:
+                for i in range(len(pickdata)):
+                    if i >= 5:
+                        break
+                    text += "\n\n" + str(i + 1) + ". " + pickdata[i][1] + "\n￥" + pickdata[i][4] + "\n" + pickdata[i][5]
+            else:
+                text += "\n\n該当する商品が見つかりませんでした。"
+            data = [{"type": "text", "text": text}]
         else:
-            category(
-                event.reply_token,
-                text = "該当する商品はありません。"
-            )
+            data = category()
+        return data
