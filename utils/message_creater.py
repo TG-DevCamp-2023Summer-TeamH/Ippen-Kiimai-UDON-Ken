@@ -162,34 +162,34 @@ def create_message(message, user_id):
             if category_id[2] == '1':
                 text = '焼き菓子のお土産一覧です。'
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             elif category_id[2] == '2':
                 text = "和菓子のお土産一覧です。"
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             elif category_id[2] == '3':
                 text = "麵類のお土産一覧です。"
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             elif category_id[2] == '4':
                 text = "飲み物のお土産一覧です。"
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             elif category_id[2] == '5':
                 text = "調味料・食品のお土産一覧です。"
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             elif category_id[2] == '6':
                 text = "骨付きどりのお土産一覧です。"
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             else:
                 text = "スナック菓子お土産一覧です。"
                 text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
             print(i)
             text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
-        data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+        data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text, "quickReply": reply}]
         return data
 
     def display_products_by_category(category_id, data):
