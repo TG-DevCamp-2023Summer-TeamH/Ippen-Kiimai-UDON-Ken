@@ -173,8 +173,9 @@ def create_message(message, user_id):
 
     elif message[0] == '4':
         def load_data():
-            data = souvenir()
-            for product in data:
+            data = []
+            products = souvenir()
+            for product in products:
                     data.append({
                         "商品の名前": souvenir[0],
                         "カテゴリID": souvenir[1],
@@ -185,7 +186,7 @@ def create_message(message, user_id):
                     data.append(product)
             return data
 
-    def display_products_by_category(category_id):
+    def display_products_by_category(category_id, data):
         products = []
         for product in data:
             if product["カテゴリID"] == category_id:
@@ -193,25 +194,23 @@ def create_message(message, user_id):
         return products
     
     def handle_message(event):
+        data = load_data()
         user_input = event.message.text
 
-        found_products = display_products_by_category(user_input)
+        found_products = display_products_by_category(user_input, data)
 
         if found_products:
-            reply_message = ''
+            reply_message = '以下のカテゴリ'
             for product in found_products:
                 reply_message += f"商品名: {product['商品の名前']}, 金額: {product['金額']}円, ECサイトリンク: {product['ECサイト']}\n\n"
-                category(
+                
+            category(
                 event.reply_token,
                 text = reply_message
-                )
+            )
         
         else:
             category(
                 event.reply_token,
                 text = "該当する商品はありません。"
             )
-
-    if __name__ == '__main__':
-        data = load_data()
-        return data
