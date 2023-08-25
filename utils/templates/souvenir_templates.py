@@ -2,7 +2,7 @@ def category():
     data = [
         {
             "type": "text",
-            "text": "気になるお土産のカテゴリーを以下のクイックリプライから選択してください。",
+            "text": "お土産検索へようこそ！\n気になるお土産のカテゴリーを以下のクイックリプライから選択してください。",
             "quickReply": {
                 "items":[
                     {
@@ -10,7 +10,7 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "お土産一覧",
-                            "text": "4-0香川県のおすすめのお土産"
+                            "text": "4-0 香川県のおすすめのお土産"
                         }
                     },
                     {
@@ -18,7 +18,7 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "焼き菓子",
-                            "text": "4-1香川県の焼き菓子のお土産"
+                            "text": "4-1 香川県の焼き菓子のお土産"
                         }
                     },
                     {
@@ -26,7 +26,7 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "和菓子",
-                            "text": "4-2香川県の和菓子のお土産"
+                            "text": "4-2 香川県の和菓子のお土産"
                         }
                     },
                     {
@@ -34,7 +34,7 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "麺類",
-                            "text": "4-3香川県の麺類のお土産"
+                            "text": "4-3 香川県の麺類のお土産"
                         }
                     },
                     {
@@ -42,7 +42,7 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "飲み物",
-                            "text": "4-4香川県の飲み物のお土産"
+                            "text": "4-4 香川県の飲み物のお土産"
                         }
                     },
                     {
@@ -50,7 +50,7 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "調味料・食品",
-                            "text": "4-5香川県の調味料・食品のお土産"
+                            "text": "4-5 香川県の調味料・食品のお土産"
                         }
                     },
                     {
@@ -58,14 +58,14 @@ def category():
                         "action": {
                             "type": "message",
                             "label": "骨付きどり",
-                            "text": "4-6香川県の骨付きどりのお土産"
+                            "text": "4-6 香川県の骨付きどりのお土産"
                         }
                     },{
                         "type": "action",
                         "action": {
                             "type": "message",
                             "label": "スナック菓子",
-                            "text": "4-7香川県のスナック菓子のお土産"
+                            "text": "4-7 香川県のスナック菓子のお土産"
                         }
                     },
                 ]
@@ -102,7 +102,7 @@ def souvenir():
             ["25", "ふふふ。。吟醸酒300ml（MORIKUNI）", "4", "飲み物", "817", "https://www.morikuni.jp/?pid=58166416"],
             ["26", "オリーブサイダー", "4", "飲み物", "200", "https://www.1st-olive.com/SHOP/4580237117031.html"],
             ["27", "そうめんポリポリ（菊水堂）", "3", "麵類", "430", "https://www.camatoco.com/c-item-detail?ic=A000000047"],
-            ["28", "エキストラバージンオリーブオイル（川本植物園）", "5", "調味料・食品", "", ""],
+            ["28", "エキストラバージンオリーブオイル（川本植物園）", "5", "調味料・食品", "不明", "URLなし"],
             ["29", "島のパスタソース（小豆島庄八）", "5", "調味料・食品", "700", "https://www.seto-s.com/shopbrand/pasta-sauce/"],
             ["30", "小豆島産100%エキストラバージンオリーブオイル91g（100ml）（アグリオリーブオイル）", "5", "調味料・食品", "1080", "https://agri-olive.co.jp/?mode=cate&cbid=2796629&csid=0"],
             ["31", "オリーブ茶ペットボトル（ヤマヒサ）", "4", "飲み物", "162", "https://yama-hisa.jp/SHOP/9-1-1.html"]]
