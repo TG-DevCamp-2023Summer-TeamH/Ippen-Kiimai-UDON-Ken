@@ -40,17 +40,17 @@ def create_message(message, user_id):
                 if message[2] == 'a':
                     for i in filedata:
                         if i[today_row] != "定休日" and i[today_row] != "営業時間情報無し":
-                            if message[5] == "d" or message[5] == "m" or int('{:02}'.format(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int('{:02}'.format(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
+                            if message[5] == "d" or message[5] == "m" or int(str(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int(str(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
                                 pickdata.append(i)
                 else:
                     for i in filedata:
                         if message[2] == i[5] and i[today_row] != "定休日" and i[today_row] != "営業時間情報無し":
-                            if message[5] == "d" or message[5] == "m" or int('{:02}'.format(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int('{:02}'.format(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
+                            if message[5] == "d" or message[5] == "m" or int(str(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int(str(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
                                 pickdata.append(i)
             else:
                 for i in filedata:
                     if message[2] == i[5] and message[4] == i[8] and i[today_row] != "定休日" and i[today_row] != "営業時間情報無し":
-                        if message[5] == "d" or message[5] == "m" or int('{:02}'.format(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int('{:02}'.format(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
+                        if message[5] == "d" or message[5] == "m" or int(str(i[today_row]) + '{:02}'.format(i[today_row + 1])) <= now_time and int(str(i[today_row + 2]) + '{:02}'.format(i[today_row + 3])) >= now_time:
                             pickdata.append(i)
             if len(pickdata) != 0:
                 for i in range(len(pickdata)):
@@ -61,28 +61,11 @@ def create_message(message, user_id):
                     tmp = pickdata[i]
                     pickdata[i] = pickdata[index]
                     pickdata[index] = tmp
-                count = 0
-                star = 5
-                while star > 1.0:
-                    start = count - 1
-                    while pickdata[count][15] == str(star):
-                        count += 1
-                    finish = count
-                    for i in range(start, finish):
-                        index = i
-                        for l in range(i, finish):
-                            if pickdata[index][14] < pickdata[i][14]:
-                                index = l
-                        tmp = pickdata[i]
-                        pickdata[i] = pickdata[index]
-                        pickdata[index] = tmp
-                    star -= 0.1
                 for i in range(len(pickdata)):
                     if i >= 5:
                         break
                     text += "\n\n" + str(i + 1) + "位 " + pickdata[i][1] + "\n" + pickdata[i][13] + "\n☆" + pickdata[i][15] + " (" + pickdata[i][16] + "件の口コミ)\n" + pickdata[i][today_row] + ":{:02}".format(pickdata[i][today_row + 1]) + " ～ " + pickdata[i][today_row + 2] + ":{:02}\n".format(pickdata[i][today_row + 3]) + pickdata[i][14]
                 print(text)
-                
                 data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
             else:
                 text += "\n該当する施設が見つかりませんでした。"
