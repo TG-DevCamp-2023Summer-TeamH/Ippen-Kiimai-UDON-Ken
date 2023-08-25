@@ -97,7 +97,7 @@ def create_message(message, user_id):
         if message[2].isdecimal() or message[2] == '2':
             pickedata = []
             text = "エリア内には以下のスポットがあります。"
-            if message[4] == 'a':
+            if message[4] == '2':
                 for i in filedata:
                     if message[2] == i[5]:
                         pickedata.append(i)
@@ -168,13 +168,43 @@ def create_message(message, user_id):
             return data
 
     elif message[0] == '4':
-        text = "お土産リスト"
         products = souvenir()
+        category_id = products[2]
+        
+        text = "お土産リスト\n※価格は作成時にECサイトで表示されている最安値価格を使用しております。値上げなどがされている場合はご容赦ください。"
         print(products)
         for i in products:
+            if category_id[2] == '1':
+                text = '焼き菓子のお土産一覧です。'
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+            elif category_id[2] == '2':
+                text = "和菓子のお土産一覧です。"
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+            elif category_id[2] == '3':
+                text = "麵類のお土産一覧です。"
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+            elif category_id[2] == '4':
+                text = "飲み物のお土産一覧です。"
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+            elif category_id[2] == '5':
+                text = "調味料・食品のお土産一覧です。"
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+            elif category_id[2] == '6':
+                text = "骨付きどりのお土産一覧です。"
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
+            else:
+                text = "スナック菓子お土産一覧です。"
+                text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+                data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
             print(i)
-            text += "\n\n" + i[1] + "\n" + i[5]
-        data = [{"type": "text", "text": text}]
+            text += "\n\n" + i[1] + "\n" + i[2] + "\n" + i[3] + "\n" + i[4] + "\n" + i[5]
+        data = [{"type": "text", "text": text, "type": text, "type": text, "type": text, "type": text}]
         return data
 
     def display_products_by_category(category_id, data):
@@ -185,13 +215,12 @@ def create_message(message, user_id):
         return products
     
     def handle_message(event):
-        data = load_data()
         user_input = event.message.text
 
         found_products = display_products_by_category(user_input, data)
 
         if found_products:
-            reply_message = '以下のカテゴリ'
+            reply_message = ''
             for product in found_products:
                 reply_message += f"商品名: {product['商品の名前']}, 金額: {product['金額']}円, ECサイトリンク: {product['ECサイト']}\n\n"
                 
