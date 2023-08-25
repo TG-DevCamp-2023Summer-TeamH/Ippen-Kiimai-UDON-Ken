@@ -175,7 +175,6 @@ def create_message(message, user_id):
         def load_data():
             data = []
             products = souvenir()
-            for product in products:
                     data = [{"type": "text", "text": text}]
                     data.append(product)
             return data
