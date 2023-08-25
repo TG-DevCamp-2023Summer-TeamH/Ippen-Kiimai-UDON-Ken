@@ -9,6 +9,14 @@ def category():
                         "type": "action",
                         "action": {
                             "type": "message",
+                            "label": "お土産一覧",
+                            "text": "4-0香川県のおすすめのお土産"
+                        }
+                    },
+                    {
+                        "type": "action",
+                        "action": {
+                            "type": "message",
                             "label": "焼き菓子",
                             "text": "4-1香川県の焼き菓子のお土産"
                         }
