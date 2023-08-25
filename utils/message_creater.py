@@ -14,10 +14,9 @@ def create_message(message, user_id):
     now = datetime.datetime.now()
     now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
     now_time = int(now_time)
+    day = {0: 21, 1: 25, 2: 29, 3: 33, 4: 37, 5: 41, 6: 17}
     if message[0] == '1':
         if message[4].isdecimal() or message[4] == 'a':
-            now = datetime.datetime.now()
-            day = {0: 21, 1: 25, 2: 29, 3: 33, 4: 37, 5: 41, 6: 17}
             today_row = day[now.weekday()]
             now_time = str('{:02}'.format(now.hour)) + str('{:02}'.format(now.minute))
             now_time = int(now_time)
