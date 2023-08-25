@@ -95,7 +95,7 @@ def create_message(message, user_id):
             #weathercodeで場合分け
         weathercode_list = ["102", "103", "104", "105", "106", "107", "108", "112", "113", "114", "115", "116", "117", "118", "119", "123", "124", "125", "126", "140", "160", "170", "181", "202", "203", "204", "205", "206", "207", "208", "212", "213", "214", "215", "216", "217", "218", "219", "224", "228", "240", "250", "260", "270", "281", "300", "301", "302", "303", "304", "306", "308", "309", "311", "313", "314", "315", "316", "317", "322", "328", "329", "340", "350", "371", "400", "401", "402", "403", "405", "406", "407", "409", "413", "414", "422", "423", "425", "426", "427", "450"]
         weathercode = int(weather_data.get("timeSeries")[0].get("areas")[0].get("wheatherCodes")[0])
-        if message[4].isdecimal() or message[4] == 'a':
+        if message[2].isdecimal() or message[2] == '2':
                 pickedata = []
                 text = "エリア内には以下のスポットがあります。"
                 if message[4] == 'a':
@@ -153,21 +153,21 @@ def create_message(message, user_id):
                         if now_time:
                             opening_hours = parse_hours(now_time)
                             if is_shop_open(opening_hours, now_time):
-                                print(f"観光スポットは{current_day}に現在営業しています。")
+                                print(f"観光スポットは{now.weekday}に現在営業しています。")
                             else:
-                                print(f"観光スポットは{current_day}に現在営業していません。")
+                                print(f"観光スポットは{now.weekday}に現在営業していません。")
                         else:
                             print("観光スポットは定休日です。")
                         break
 
         if weathercode in weathercode_list:
                 print('屋外の観光スポットは以下の通りです。\n')
-                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
+                data = [{"type": "text", "text": text}]
                 print(data)
                 return data
         else:
                 print('屋内の観光スポットは以下の通りです。\n')
-                data = [{"type": "text", "text": text, "quickReply": today_tomorrow(message[2], message[4])}]
+                data = [{"type": "text", "text": text,}]
                 print(data)
                 return data
 
@@ -176,13 +176,7 @@ def create_message(message, user_id):
             data = []
             products = souvenir()
             for product in products:
-                    data.append({
-                        "商品の名前": souvenir[0],
-                        "カテゴリID": souvenir[1],
-                        "カテゴリ名": souvenir[2],
-                        "金額": souvenir[3],
-                        "ECサイト": souvenir[4]
-                        })
+                    data = [{"type": "text", "text": text}]
                     data.append(product)
             return data
 
