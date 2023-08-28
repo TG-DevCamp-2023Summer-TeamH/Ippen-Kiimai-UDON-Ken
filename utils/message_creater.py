@@ -191,3 +191,6 @@ def create_message(message, user_id):
         else:
             data = category()
         return data
+    
+    else:
+        return [{"type": "text", "text": "このメッセージには対応していません。\nリッチメニューより再度お試しください。"}]

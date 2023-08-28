@@ -22,7 +22,7 @@ def set_stamp(message, user_id):
             near_value = distance
             index = i
     print(near_value)
-    if near_value > 50:
+    if near_value > 500:
         index = None
         data = callAgain(user_id)
     else:
