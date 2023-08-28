@@ -89,7 +89,7 @@ def doubleStamp(user_id, shop_name):
                         "action": {
                             "type": "uri",
                             "label": "スタンプを確認する",
-                            "uri": "https://161e-2400-2653-4983-b700-7da1-1b56-4cf8-5dfe.ngrok-free.app/line_bot/stamp/" + user_id,
+                            "uri": url() + "/line_bot/stamp/" + user_id,
                         }
                     }
                 ]
